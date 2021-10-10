@@ -54,9 +54,26 @@
             // const filterChars = chars.filter((char)=>{
             //     return(char.Title.toLowerCase().includes(searchChar));
             // })
+            const fn = (searchChar)=>{
+                showMovieName(loadChars(searchChar));
+           }
+            const throttledCallback = throttler(()=>fn(searchChar),100)
+            searchBar.addEventListener("input",throttledCallback)
             showMovieName(loadChars(searchChar));
          });
          
+         function throttler(fn,delay){
+            let lastCall = Date.now();
+            return function(){
+                let now = Date.now()
+                if(now-lastCall >delay)
+                {
+                    lastCall = now;
+                    fn();
+                }
+            }
+        }
+
          const loadChars = async (chars)=>{
              try{
                 const res = await fetch(`http://www.omdbapi.com/?t=${chars}&apikey=42e91e0f`)
@@ -77,15 +94,13 @@
             // })
             // .join('');
             // result.innerHTML = moviesName;
-
-
+  
+            result.innerHTML="";
             const h2 = document.createElement("h2")
             h2.textContent = movies.Title;
             result.append(h2);
          };
-
-         
-
+        //  loadChars();
     </script>
 </body>
 
