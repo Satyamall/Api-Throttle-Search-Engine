@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Bar of Movies</title>
+    <style>
+        #main {
+            width: 50%;
+            margin: auto;
+            padding-top: 20%;
+        }
+
+        h1 {
+            background-color: orange;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        #searchBar {
+            width: 350px;
+            height: 40px;
+            border-radius: 20px;
+            font-size: 20px;
+            background-color: whitesmoke;
+        }
+
+        #result {
+            width: 350px;
+            background-color: whitesmoke;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <h1>Search Movies Below</h1>
+        <div id="searchItems">
+            <input id="searchBar" type="text" name="searchBar" placeholder="🔍 Search any movie"/>
+        </div>
+        <ul id="result">  
+        </ul>
+    </div>
+    
+    <script>
+        const result = document.getElementById("result");
+        const searchBar = document.getElementById("searchBar");
+        let chars = [];
+         searchBar.addEventListener("keyup", (e) => {
+             const searchChar = e.target.value.toLowerCase();
+            // const filterChars = chars.filter((char)=>{
+            //     return(char.Title.toLowerCase().includes(searchChar));
+            // })
+            showMovieName(loadChars(searchChar));
+         });
+         
+         const loadChars = async (chars)=>{
+             try{
+                const res = await fetch(`http://www.omdbapi.com/?t=${chars}&apikey=42e91e0f`)
+                chars = await res.json();
+                // console.log(res,chars)
+                showMovieName(chars)
+             }
+             catch(err){
+
+             }
+         }
+
+         const showMovieName = (movies) =>{
+            // const moviesName = movies
+            //     .map((char)=>{
+            //       return ` 
+            //     <li><h2>${char.name}</h2></li>`;
+            // })
+            // .join('');
+            // result.innerHTML = moviesName;
+
+
+            const h2 = document.createElement("h2")
+            h2.textContent = movies.Title;
+            result.append(h2);
+         };
+
+         
+
+    </script>
+</body>
+
+</html>
